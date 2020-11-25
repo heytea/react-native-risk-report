@@ -1,0 +1,1 @@
+export function getDeviceToken(appKey: string): Promise<string>;
