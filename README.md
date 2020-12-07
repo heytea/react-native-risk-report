@@ -12,6 +12,6 @@
 ```javascript
 import ReactNativeRiskReport from '@heytea/react-native-risk-report';
 
-// TODO: What to do with the module?
-ReactNativeRiskReport;
+// 获取 deviceToken
+ReactNativeRiskReport.getDeviceToken(appKey: string): Promise<string | null>;
 ```

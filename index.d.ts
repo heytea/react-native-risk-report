@@ -1,1 +1,1 @@
-export function getDeviceToken(appKey: string): Promise<string>;
+export function getDeviceToken(appKey: string): Promise<string | null>;
