@@ -1,13 +1,15 @@
 #import "ReactNativeRiskReport.h"
+#import <React/RCTBridge.h>
 
 @implementation ReactNativeRiskReport
 
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(sampleMethod:(NSString *)stringArgument numberParameter:(nonnull NSNumber *)numberArgument callback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(getDeviceToken:(NSString *)appKey
+                :(RCTPromiseResolveBlock)resolve
+                :(RCTPromiseRejectBlock)reject)
 {
-    // TODO: Implement some actually useful functionality
-    callback(@[[NSString stringWithFormat: @"numberArgument: %@ stringArgument: %@", numberArgument, stringArgument]]);
+    resolve([NSNull null]);
 }
 
 @end
