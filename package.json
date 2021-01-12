@@ -1,13 +1,14 @@
 {
   "name": "@heytea/react-native-risk-report",
   "title": "React Native Risk Report",
-  "version": "0.0.2",
-  "description": "TODO",
+  "version": "1.0.0",
+  "description": "React Native Risk Report",
   "main": "index.js",
   "files": [
     "README.md",
     "android",
     "index.js",
+    "index.d.ts",
     "ios",
     "react-native-risk-report.podspec"
   ],
