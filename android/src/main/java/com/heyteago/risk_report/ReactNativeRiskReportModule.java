@@ -32,49 +32,60 @@ public class ReactNativeRiskReportModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     private void getDeviceToken(String appKey, final Promise promise) {
-        if (deviceToken == null) {
-            final boolean[] isResolved = {false};
-            // 设置10s超时
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (ReactNativeRiskReportModule.class) {
-                        if (deviceToken == null) {
-                            isResolved[0] = true;
-                            promise.resolve(null);
-                        }
+        if (deviceToken != null) {
+            promise.resolve(deviceToken);
+            return;
+        }
+        final boolean[] isResolved = {false};
+        // 设置10s超时
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (ReactNativeRiskReportModule.class) {
+                    if (deviceToken == null) {
+                        isResolved[0] = true;
+                        promise.resolve(null);
                     }
                 }
-            }, 10000);
-            SecurityDevice.getInstance().init(this.reactContext, appKey, new SecurityInitListener() {
-                @Override
-                public void onInitFinish(int i) {
-                    mHandler.postDelayed(new Runnable() {
+            }
+        }, 10000);
+        SecurityDevice.getInstance().init(this.reactContext, appKey, new SecurityInitListener() {
+            @Override
+            public void onInitFinish(int code) {
+                if (SecurityCode.SC_SUCCESS == code) {
+                    new Thread(new Runnable() {
                         @Override
                         public void run() {
                             synchronized (ReactNativeRiskReportModule.class) {
-                                // 获取客户端Session，getSession接口一般在init接口调用之后3秒后调用。
                                 SecuritySession securitySession = SecurityDevice.getInstance().getSession();
-                                if (SecurityCode.SC_SUCCESS != securitySession.code) {
-                                    Log.e("ReactNativeRiskReport", "getSession获取的结果是无效的.");
-                                    if (!isResolved[0]) {
-                                        promise.resolve(null);
-                                    }
-                                } else {
+                                if (SecurityCode.SC_SUCCESS == securitySession.code) {
                                     deviceToken = securitySession.session;
                                     if (!isResolved[0]) {
-                                        promise.resolve(deviceToken);
+                                        mHandler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                promise.resolve(deviceToken);
+                                            }
+                                        });
                                     }
                                     Log.i("ReactNativeRiskReport", "getSession成功，session: " + securitySession.session);
+                                } else {
+                                    Log.e("ReactNativeRiskReport", "getSession获取的结果是无效的.");
+                                    if (!isResolved[0]) {
+                                        mHandler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                promise.resolve(null);
+                                            }
+                                        });
+
+                                    }
                                 }
                             }
                         }
-                    }, 3000);
+                    }).start();
                 }
-            });
-        } else {
-            promise.resolve(deviceToken);
-        }
-
+            }
+        });
     }
 }
