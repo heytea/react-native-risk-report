@@ -22,10 +22,10 @@ RCT_EXPORT_METHOD(getDeviceToken:(NSString *)appKey
             // 成功
             resolve(token);
           }else{
-              reject()
+              resolve(@"");
           }
       }else{
-          reject();
+        resolve(@"");
       }
     }];
 }
