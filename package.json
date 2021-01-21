@@ -1,7 +1,7 @@
 {
   "name": "@heytea/react-native-risk-report",
   "title": "React Native Risk Report",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "React Native Risk Report",
   "main": "index.js",
   "files": [
